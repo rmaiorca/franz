@@ -63,7 +63,9 @@ const Brokers = () => {
               elevation={16}
             >
               <RealTimeLineChart
-                query={BYTES_IN_PER_SECOND}
+                // These are all props
+                query={BYTES_IN_PER_SECOND} // points to queries.tsx line 141
+                // the query requires start and end which comes from RealTimeChart.
                 metric="bytesInPerSecond"
                 step="30s"
                 duration={5}

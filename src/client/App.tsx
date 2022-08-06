@@ -12,28 +12,39 @@ import { BatchHttpLink } from "@apollo/client/link/batch-http";
 import { Chart } from "chart.js";
 import { Layout } from "./Layout/Layout";
 // Create a batch link to have reduce network requests needed to query data
+
+// https://www.apollographql.com/docs/react/api/link/apollo-link-http/
 const link = new BatchHttpLink({
   uri: "/graphql",
-  batchMax: 6,
-  batchInterval: 20,
-  batchDebounce: true,
+  batchMax: 6, // no more than 6 operation per batch
+  batchInterval: 20, // Wait no more than 20ms after first batched operation
+  batchDebounce: true, // If true, the batchInterval timer is reset whenever an operation is added to the batch.
 });
 
+// https://www.apollographql.com/docs/react/get-started
+// https://www.apollographql.com/docs/react/api/cache/InMemoryCache/
+// https://www.apollographql.com/docs/react/caching/cache-configuration/
 const client = new ApolloClient({
   link,
   cache: new InMemoryCache({
     typePolicies: {
+      // broker requires keyFields because unlike cluster it is not known to be singular
       Broker: {
         keyFields: ["brokerId"],
         merge: true,
+        // basically merge will take two different queries for the same broker and merge their fields
+        // so brokerId 1, cpu usage and disk usage will be merged in cache under brokerId 1
+        // https://www.apollographql.com/docs/react/caching/cache-field-behavior/#the-merge-function
         fields: {},
       },
+      // cluster doesnt have key fields because it is singular so all queries related to the cluster refer to the same cluster
+
       Cluster: {
         keyFields: [],
       },
     },
   }),
-});
+}); // look to graphQl/datasource/models/promQueries.ts
 
 const darkTheme = createTheme({
   palette: {

@@ -1,0 +1,2 @@
+// Kafka >> Prometheus >> {Express }ApolloGraphQL {Express} >> FrontEnd
+// Kafka << KafkaJS Admin Client << ApolloGraphQL (mutation query) << FrontEnd

@@ -1,11 +1,18 @@
 import { PromQuery } from "../../../../../types/types";
 
+//This file connects to graphql using promql to query prometheus server
+
 /* Broker Queries */
+// PromQuery is a type definition from typeDefs.ts
 export const BROKER_CPU_USAGE: PromQuery = {
   name: "Broker CPU Usage",
   query:
+    // this is given to us directly from PromethiusAPI.ts |
     'rate(process_cpu_seconds_total{job="kafka", instance=~"filter"}[1m])*100',
   type: "broker",
+  // This is a filter coming from promethiusAPI.ts  (queryData line 48) Line 48 ternery broker
+  // 'topic' and 'cluster' and caught by the else statement on line 50
+  // go to resolvers
 };
 
 export const JVM_MEMORY_USAGE: PromQuery = {

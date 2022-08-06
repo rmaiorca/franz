@@ -17,6 +17,11 @@ import { GqlChartProps } from "../../../types/types";
 import { useQuery } from "@apollo/client";
 import ChartStreaming from "chartjs-plugin-streaming";
 
+//https://www.apollographql.com/docs/react/data/queries/#setting-a-fetch-policy - line 143
+//https://medium.com/@galen.corey/understanding-apollo-fetch-policies-705b5ad71980 - line 143
+
+// Network data means we are going to fetch new data from promethius and not just cache data. See line 145
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -137,8 +142,12 @@ export default function RealTimeLineChart({
       step: step,
       ...args,
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: "network-only", // this policy ensures we fetch new data from Prometheus instead of returning the last queried data in the cache
+    // this way the chart always displays new metrics in the time series
+    // by default useQuery would return cached data first, so we are overriding this to make sure we get fresh data from PRrometheus each time
     nextFetchPolicy: "network-only",
+    // ensures the next fetch is also not from the cache
+    // required to continue to override defaults of returning cached data after first query
     notifyOnNetworkStatusChange: true,
   });
 

@@ -1,5 +1,8 @@
 import { gql } from "@apollo/client";
 
+//These are the FE graphql queries - connects to Apollo to get data
+//Aliases in graphql - https://blog.logrocket.com/using-aliases-graphql/
+
 export const DASHBOARD_CARD_METRICS_QUERY = gql`
   query Cluster {
     cluster {
@@ -142,15 +145,19 @@ export const BYTES_IN_PER_SECOND = gql`
     $step: String!
     $brokerIds: [Int]
   ) {
+    # topic is an alias for bytesInPerSecondOverTime
     topic: bytesInPerSecondOverTime(
       start: $start
       end: $end
       step: $step
       brokerIds: $brokerIds
     ) {
+      # this topic is not an alias
       topic
+      # bytesInPerSecond and alias for values
       bytesInPerSecond: values {
         time
+        # bytesInPerSecond is an alias for metric
         bytesInPerSecond: metric
       }
     }

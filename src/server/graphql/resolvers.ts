@@ -17,7 +17,12 @@ import {
   UNDER_MIN_ISR,
 } from "./datasources/models/promQueries";
 
+// Start at Query before looking at resolvers
+// https://www.apollographql.com/docs/apollo-server/data/resolvers/
+// https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
+
 const resolvers = {
+  // Broker come from typeDefs.ts line
   Broker: {
     bytesInPerSecondOverTime: async (
       parent,
@@ -345,6 +350,10 @@ const resolvers = {
     },
   },
 
+  // Through graphQL you can only query things that in in the below list.
+  // if its missing data it will look in resolver.
+  // whatever gets returned from the first resolver is the parent.
+  // https://www.apollographql.com/docs/apollo-server/data/resolvers#resolver-chains
   Query: {
     brokers: async (
       parent,

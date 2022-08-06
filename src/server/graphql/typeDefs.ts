@@ -1,5 +1,6 @@
 import { gql } from "apollo-server-express";
 
+// Not TS definitions - setting up schema for graphql server
 export const typeDefs = gql`
   type Cluster {
     activeControllerCount: Metric
